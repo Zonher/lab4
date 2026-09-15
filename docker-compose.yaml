@@ -1,0 +1,37 @@
+name: nikita-lab3
+services:
+  postgres:
+    build: ./db
+    image: pg-lab3:latest
+    environment:
+      POSTGRES_DB: lab2db
+      POSTGRES_USER: lab2-owner
+      POSTGRES_PASSWORD: initial
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lab2-owner -d lab2db"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+  flyway:
+    image: redgate/flyway:13.2.0-alpine
+    platform: linux/amd64
+    environment:
+      DB_HOST: postgres
+      DB_NAME: lab2db
+      MIGRATE_USER: migrate
+      MIGRATE_PASSWORD: migrate
+    volumes:
+      - ./db/flyway/sql:/flyway/sql:ro
+      - ./db/flyway/conf:/flyway/conf:ro
+    command: ["migrate"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: "no"
+volumes:
+  postgres_data:

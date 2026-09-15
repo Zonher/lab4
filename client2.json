@@ -1,0 +1,8 @@
+{
+  "login":"client2",
+  "password":"password123",
+  "name":"Client Two",
+  "age":20,
+  "gender":"MALE",
+  "hairColor":"BLACK"
+}

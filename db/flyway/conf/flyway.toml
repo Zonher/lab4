@@ -1,0 +1,9 @@
+[environments.local]
+url="jdbc:postgresql://${env.DB_HOST}:5432/${env.DB_NAME}"
+user="${env.MIGRATE_USER}"
+password="${env.MIGRATE_PASSWORD}"
+connectRetries=3
+schemas=["lab2"]
+
+[flyway]
+environment = "local"
